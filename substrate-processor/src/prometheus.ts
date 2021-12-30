@@ -28,6 +28,20 @@ export class Prometheus {
         aggregator: 'max'
     })
 
+    private rangeFrom = new Gauge({
+        name: 'substrate_processor:range_from',
+        help: 'Range.from',
+        registers: [this.registry],
+        aggregator: 'max'
+    })
+
+    private rangeTo = new Gauge({
+        name: 'substrate_processor:range_to',
+        help: 'Range.to',
+        registers: [this.registry],
+        aggregator: 'max'
+    })
+    
     constructor() {
         collectDefaultMetrics({register: this.registry})
         this.setLastProcessedBlock(-1)
@@ -40,6 +54,11 @@ export class Prometheus {
 
     setChainHeight(height: number): void {
         this.chainHeight.set(height)
+    }
+
+    setRange(heightFrom: number, heightTo: number | undefined): void {
+        this.rangeFrom.set(heightFrom || 0)
+        this.rangeTo.set(heightTo || 0)
     }
 
     private async handleHttpRequest(

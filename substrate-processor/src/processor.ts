@@ -168,6 +168,7 @@ export class SubstrateProcessor {
 
         let prometheus = new Prometheus()
         let prometheusServer = sm.add(await prometheus.serve(this.getPrometheusPort()))
+        prometheus.setRange(blockRange.from, blockRange.to);
         console.log(`Prometheus metrics are served at port ${prometheusServer.port}`)
 
         let ingest = sm.add(new Ingest({
